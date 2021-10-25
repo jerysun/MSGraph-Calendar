@@ -40,4 +40,20 @@ export class GraphService {
     }
     return undefined;
   }
+
+  async addEventToCalendar(newEvent: MicrosoftGraph.Event): Promise<void> {
+    if (!this.authService.graphClient) {
+      this.alertsService.addError('Graph client is not initialized.');
+      return undefined;
+    }
+
+    try {
+      // POST /me/events
+      await this.authService.graphClient
+        .api('/me/events')
+        .post(newEvent);
+    } catch (error) {
+      throw Error(JSON.stringify(error, null, 2));
+    }
+  }
 }
